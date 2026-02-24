@@ -1,0 +1,469 @@
+# Zeta Division Store
+
+🛍️ E-commerce moderno da Zeta Division - Marca de lifestyle gamer sediada em Tóquio, Japão.
+
+## 📋 Visão Geral
+
+Aplicação completa de e-commerce desenvolvida com React + Vite (frontend) e Flask (backend API), featuring design responsivo, carrinho de compras funcional e experiência de usuário premium.
+
+---
+
+## 🚀 Stack Tecnológico
+
+### Frontend
+- **React 18.2.0** - Biblioteca UI component-based
+- **Vite 5.0.8** - Build tool ultra-rápido com HMR
+- **CSS Variables** - Sistema de design themable
+- **React Hooks** - useState, useEffect, useContext
+- **Component Architecture** - Estrutura modular e reutilizável
+
+### Backend
+- **Flask 2.3.3** - Web framework Python
+- **Flask-CORS 4.0.0** - Cross-Origin Resource Sharing
+- **Blueprint Pattern** - Arquitetura modular
+- **RESTful API** - Endpoints JSON
+
+### Development
+- **Node.js** - Runtime JavaScript
+- **npm** - Gerenciador de pacotes
+- **Hot Module Replacement** - Recarga instantânea
+- **Proxy Configuration** - Integração frontend/backend
+
+---
+
+## 📁 Estrutura do Projeto
+
+```
+ZetaDivision/
+├── frontend/                    # Aplicação React
+│   ├── src/
+│   │   ├── components/          # Componentes React
+│   │   │   ├── pages/          # Páginas principais
+│   │   │   │   ├── PaginaInicial.jsx
+│   │   │   │   ├── PaginaProduto.jsx
+│   │   │   │   └── PaginaCatalogo.jsx
+│   │   │   ├── UI/             # Componentes UI reutilizáveis
+│   │   │   │   ├── Button.jsx
+│   │   │   │   ├── QuantitySelector.jsx
+│   │   │   │   └── EstrelaInsignia.jsx
+│   │   │   ├── Header.jsx
+│   │   │   ├── Footer.jsx
+│   │   │   ├── ProductCard.jsx
+│   │   │   └── CartDrawer.jsx
+│   │   ├── contexts/           # React Context
+│   │   │   └── CarrinhoContext.jsx
+│   │   ├── utils/              # Utilitários
+│   │   │   └── constants.js
+│   │   ├── styles/             # Estilos globais
+│   │   │   └── globals.css
+│   │   ├── App.jsx             # Componente principal
+│   │   └── main.jsx            # Ponto de entrada
+│   ├── package.json
+│   ├── vite.config.js
+│   └── index.html
+├── backend/                     # API Flask
+│   ├── app/
+│   │   ├── __init__.py         # Factory pattern
+│   │   └── blueprints/
+│   │       ├── __init__.py
+│   │       └── frontend.py     # Blueprint principal
+│   ├── main.py                 # Ponto de entrada
+│   ├── requirements.txt
+│   └── venv/                   # Ambiente virtual
+└── README.md
+```
+
+---
+
+## 🛠️ Configuração do Ambiente
+
+### Pré-requisitos
+- **Node.js 18+** 
+- **Python 3.8+**
+- **npm** (geralmente vem com Node.js)
+
+### Instalação
+
+1. **Clone o repositório**
+   ```bash
+   git clone <repository-url>
+   cd ZetaDivision
+   ```
+
+2. **Configure o Backend (Flask)**
+   
+   **Linux/Mac:**
+   ```bash
+   cd backend
+   
+   # Criar ambiente virtual
+   python -m venv venv
+   
+   # Ativar ambiente virtual
+   source venv/bin/activate
+   
+   # Instalar dependências
+   pip install -r requirements.txt
+   ```
+   
+   **Windows:**
+   ```bash
+   cd backend
+   
+   # Criar ambiente virtual
+   python -m venv venv
+   
+   # Ativar ambiente virtual
+   venv\Scripts\activate
+   
+   # Instalar dependências
+   pip install -r requirements.txt
+   ```
+   
+
+3. **Configure o Frontend (React + Vite)**
+   ```bash
+   cd frontend
+   
+   # Instalar dependências
+   npm install
+   ```
+
+---
+
+## 🚀 Como Executar
+
+### Método 1: Dois Terminais (Recomendado)
+
+**Terminal 1 - Backend Flask:**
+   
+   **Linux/Mac:**
+   ```bash
+   cd backend
+   source venv/bin/activate
+   python main.py
+   ```
+   
+   **Windows:**
+   ```bash
+   cd backend
+   venv\Scripts\activate
+   python main.py
+   ```
+   
+📍 API rodando em: http://localhost:5000
+
+**Terminal 2 - Frontend Vite:**
+```bash
+cd frontend
+npm run dev
+```
+📍 Frontend rodando em: http://localhost:3000
+
+### Método 2: Apenas Frontend (Para desenvolvimento rápido)
+
+Se você só quer trabalhar no frontend:
+```bash
+cd frontend
+npm run dev
+```
+O Vite já serve o React com proxy para o backend Flask.
+
+---
+
+## 📡 Endpoints da API
+
+### Health Check
+```http
+GET /api/health
+```
+Response:
+```json
+{
+  "status": "ok",
+  "message": "Zeta Division Store API is running"
+}
+```
+
+### Produtos
+```http
+GET /api/produtos
+```
+Response:
+```json
+{
+  "produtos": [],
+  "message": "API endpoint para produtos - implementar lógica de negócio"
+}
+```
+
+---
+
+## 🎨 Features Implementadas
+
+### ✅ Frontend Features
+- **Navegação SPA** entre páginas
+- **Carrinho de Compras** funcional com React Context
+- **Página de Produto** completa com:
+  - Galerias de imagens
+  - Seleção de tamanho
+  - Seleção de jogador (quando aplicável)
+  - Quantidade
+  - Produtos relacionados
+- **Design Responsivo** para mobile/tablet/desktop
+- **Header Fixo** com menu mobile
+- **Footer** completo com links
+- **Animações** suaves e transições
+- **Hot Reload** em desenvolvimento
+
+### ✅ Backend Features
+- **API RESTful** organizada com Blueprints
+- **CORS** configurado para frontend
+- **Factory Pattern** para escalabilidade
+- **Health Check** endpoint
+- **Estrutura modular** para novos endpoints
+
+---
+
+## 🎯 Sistema de Design
+
+### Cores (Tema Claro)
+```css
+--bg: #ffffff;           /* Fundo principal */
+--bg2: #f8f9fa;          /* Fundo secundário */
+--tx: #1a1a1a;           /* Texto principal */
+--txm: #666666;          /* Texto secundário */
+--ac: #2563eb;           /* Cor de destaque (azul) */
+--br: #e0e0e0;           /* Bordas */
+```
+
+### Tipografia
+- **Fonte Display**: Bebas Neue
+- **Fonte Body**: Rajdhani
+- **Fonte Mono**: Space Mono
+
+### Componentes UI
+- **Buttons**: Primary, Ghost, Accent variants
+- **Cards**: Product cards com hover effects
+- **Forms**: Selectors e inputs customizados
+- **Navigation**: Header fixo com menu mobile
+
+---
+
+## 🔧 Comandos Úteis
+
+### Frontend
+```bash
+npm run dev      # Servidor de desenvolvimento
+npm run build    # Build para produção
+npm run preview  # Preview do build
+```
+
+### Backend
+```bash
+python main.py    # Iniciar servidor Flask
+pip freeze        # Ver dependências instaladas
+```
+
+---
+
+## 📱 Responsividade
+
+- **Mobile**: < 768px - Layout single column
+- **Tablet**: 768px - 1024px - Layout adaptativo
+- **Desktop**: > 1024px - Layout completo com grid
+
+---
+
+## 🔄 Fluxo de Navegação
+
+1. **Página Inicial** → Hero section + produtos em destaque
+2. **Catálogos** → Produtos filtrados por categoria
+3. **Detalhe Produto** → Informações completas + carrinho
+4. **Carrinho** → Drawer lateral com itens
+5. **Footer** → Links e informações da loja
+
+---
+
+## 🚀 Deploy
+
+### Frontend (Vercel/Netlify)
+```bash
+npm run build
+# Deploy da pasta /dist
+```
+
+### Backend (Heroku/Render)
+```bash
+# Configurar variáveis de ambiente
+# Instalar dependências
+# Executar: gunicorn main:app
+```
+
+---
+
+## 🤝 Contribuindo
+
+1. Fork o repositório
+2. Crie uma branch: `git checkout -b feature/nova-feature`
+3. Commit suas mudanças: `git commit -m 'Add nova feature'`
+4. Push: `git push origin feature/nova-feature`
+5. Abra um Pull Request
+
+---
+
+## 🎯 Roadmap - Features Futuras
+
+### � **Autenticação e Usuários**
+- [ ] Sistema de Login/Cadastro (Email + Senha)
+- [ ] Login Social (Google, GitHub)
+- [ ] Recuperação de senha
+- [ ] Perfil do usuário com histórico
+- [ ] Endereços de entrega
+- [ ] Wishlist/Favoritos
+
+### 🛒 **E-commerce Completo**
+- [ ] Checkout completo com múltiplos passos
+- [ ] Integração com gateways de pagamento (Stripe, Mercado Pago)
+- [ ] Cálculo de frete automático
+- [ ] Cupons de desconto
+- [ ] Histórico de pedidos
+- [ ] Rastreamento de pedidos
+- [ ] Sistema de avaliações de produtos
+- [ ] Perguntas e respostas sobre produtos
+
+### 💾 **Banco de Dados**
+- [ ] PostgreSQL para produção
+- [ ] Models SQLAlchemy para produtos
+- [ ] Models para usuários, pedidos, carrinho
+- [ ] Migrations com Alembic
+- [ ] Seed data para produtos iniciais
+- [ ] Backup automático do banco
+
+### 🔍 **Funcionalidades de Busca**
+- [ ] Barra de busca funcional
+- [ ] Filtros avançados (preço, tamanho, cor)
+- [ ] Busca por categoria com sugestões
+- [ ] Ordenação (preço, popularidade, lançamentos)
+- [ ] Busca por texto completo
+
+### 📱 **Mobile e Performance**
+- [ ] App mobile (React Native)
+- [ ] PWA (Progressive Web App)
+- [ ] Lazy loading de imagens
+- [ ] Code splitting por rota
+- [ ] Service Worker para cache
+- [ ] Otimização SEO
+
+### 🎨 **UI/UX Avançado**
+- [ ] Sistema de temas (Dark/Light)
+- [ ] Animações mais elaboradas
+- [ ] Microinterações
+- [ ] Loading skeletons
+- [ ] Toast notifications
+- [ ] Modal de confirmação
+- [ ] Drag & drop no carrinho
+
+### 📊 **Painel Administrativo**
+- [ ] Dashboard de vendas
+- [ ] Gerenciamento de produtos (CRUD)
+- [ ] Controle de estoque
+- [ ] Gestão de pedidos
+- [ ] Relatórios e analytics
+- [ ] Usuários administrativos
+
+### 🔗 **Integrações Externas**
+- [ ] API de pagamento (Stripe)
+- [ ] API de frete (Correios, FedEx)
+- [ ] Email marketing (Mailchimp)
+- [ ] Analytics (Google Analytics)
+- [ ] Chat de suporte (Intercom)
+- [ ] Redes sociais (compartilhamento)
+
+### 🌐 **Internacionalização**
+- [ ] Multi-idioma (PT-BR, EN, JP)
+- [ ] Moedas múltiplas (BRL, USD, JPY)
+- [ ] Formatos de data localizados
+- [ ] Configurações regionais
+
+### 🚀 **Infraestrutura**
+- [ ] Docker containerização
+- [ ] CI/CD pipeline (GitHub Actions)
+- [ ] Deploy automático (Vercel + Heroku)
+- [ ] Monitoramento e logging
+- [ ] CDN para assets
+- [ ] Load balancing
+
+### 🧪 **Qualidade**
+- [ ] Testes unitários (Jest)
+- [ ] Testes E2E (Cypress)
+- [ ] Code coverage > 90%
+- [ ] TypeScript migration
+- [ ] ESLint + Prettier
+- [ ] Pre-commit hooks
+
+---
+
+## 🎮 **Features Específicas Zeta Division**
+- [ ] Sistema de "Team Jerseys" personalizados
+- [ ] Gamificação com pontos e badges
+- [ ] Integração com torneios de e-sports
+- [ ] Lançamentos exclusivos para membros
+- [ ] Sistema de pré-venda
+- [ ] Conteúdo de criadores associados
+- [ ] Eventos e lançamentos especiais
+
+---
+
+## 📈 **Métricas e Analytics**
+- [ ] Google Analytics 4
+- [ ] Hotjar para heatmaps
+- [ ] Console do Google Search
+- [ ] Meta Pixel para Facebook/Instagram
+- [ **Eventos personalizados**:
+  - Visualização de produtos
+  - Adição ao carrinho
+  - Início de checkout
+  - Conversões
+
+---
+
+## 🔧 **Melhorias Técnicas**
+- [ ] Migrar para TypeScript
+- [ ] Implementar Redis para cache
+- [ ] Fila de processamento (Celery)
+- [ ] WebSockets para tempo real
+- [ ] GraphQL para API
+- [ ] Server-side rendering (Next.js)
+
+---
+
+## 🐛 Troubleshooting
+
+### Problemas Comuns
+
+**Header sobrepondo conteúdo:**
+- O padding das páginas está configurado para `calc(48px + 100px)`
+- Se necessário, ajuste o valor no componente específico
+
+**CORS errors:**
+- Verifique se o backend Flask está rodando na porta 5000
+- O Vite está configurado com proxy para `/api` → `http://localhost:5000`
+
+**Hot Reload não funcionando:**
+- Reinicie o servidor de desenvolvimento: `npm run dev`
+- Verifique se não há erros de sintaxe no código
+
+---
+
+## 📄 Licença
+
+MIT License - Copyright © 2024 Zeta Division
+
+---
+
+## 📞 Contato
+
+- **Frontend**: React + Vite + CSS-in-JS
+- **Backend**: Flask + Python
+- **Design**: Sistema próprio baseado em CSS Variables
