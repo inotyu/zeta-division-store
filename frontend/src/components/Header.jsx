@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useAuth } from "../contexts/AuthContext";
 import { useCarrinho } from "../contexts/CarrinhoContext";
 import { ITENS_NAV } from "../utils/constants";
 
@@ -8,6 +9,7 @@ export default function Cabecalho({ onNav }) {
   const [buscaQ, setBuscaQ] = useState("");
   const [scrollado, setScrollado] = useState(false);
   const { quantidade, setAberto } = useCarrinho();
+  const { user, isAuthenticated } = useAuth();
 
   useEffect(() => {
     const h = () => setScrollado(window.scrollY > 20);
@@ -145,6 +147,62 @@ export default function Cabecalho({ onNav }) {
                 </span>
               )}
             </button>
+            {isAuthenticated ? (
+              <button
+                onClick={() => {
+                  // Implementar logout
+                  localStorage.removeItem('zeta_token');
+                  localStorage.removeItem('zeta_user');
+                  window.location.reload();
+                }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  padding: '8px 16px',
+                  background: 'transparent',
+                  border: '1px solid var(--brl)',
+                  borderRadius: 'var(--r)',
+                  color: 'var(--tx)',
+                  fontFamily: 'var(--fb)',
+                  fontSize: 12,
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  transition: 'all var(--tr)'
+                }}
+              >
+                <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path d="M9 21H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4"/>
+                  <path d="M16 17a2 2 0 0 1-2 2h6a2 2 0 0 1 2-2v-4a2 2 0 0 1-2-2h-6"/>
+                </svg>
+                <span>Logout</span>
+              </button>
+            ) : (
+              <button
+                onClick={() => onNav('auth')}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  padding: '8px 16px',
+                  background: '#ffffff',
+                  color: '#1a1a1a',
+                  border: '1px solid #e0e0e0',
+                  borderRadius: 'var(--r)',
+                  fontFamily: 'var(--fb)',
+                  fontSize: 12,
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  transition: 'all var(--tr)'
+                }}
+              >
+                <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+                <span>Login</span>
+              </button>
+            )}
           </div>
         </div>
 

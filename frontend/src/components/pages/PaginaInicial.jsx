@@ -59,7 +59,15 @@ export default function PaginaInicial({ onProdutoClick, onNav, catAtiva, setCatA
           }}>
             Marca de Lifestyle Gamer — Tóquio, Japão
           </p>
-          <Btn variant="accent" size="lg" onClick={() => onNav("todos")}>
+          <Btn 
+            size="lg" 
+            onClick={() => onNav("todos")}
+            style={{
+              background: '#ffffff',
+              color: '#1a1a1a',
+              border: '1px solid #e0e0e0'
+            }}
+          >
             VER TUDO
           </Btn>
         </div>

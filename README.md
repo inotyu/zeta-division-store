@@ -23,31 +23,206 @@ Aplicação completa de e-commerce desenvolvida com React + Vite (frontend) e Fl
 - **Blueprint Pattern** - Arquitetura modular
 - **RESTful API** - Endpoints JSON
 
-### Development
-- **Node.js** - Runtime JavaScript
-- **npm** - Gerenciador de pacotes
-- **Hot Module Replacement** - Recarga instantânea
-- **Proxy Configuration** - Integração frontend/backend
-
 ---
 
-## 📁 Estrutura do Projeto
+## 🗄️ Implementação do Banco de Dados
+
+### Status Atual
+O sistema atualmente utiliza **dados mockados em memória** para testes e desenvolvimento. Para produção, é necessário implementar um banco de dados real.
+
+### 📊 Modelos de Dados
+
+#### Usuário (`User`)
+```python
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    is_active = db.Column(db.Boolean, default=True)
+
+    def set_password(self, password):
+        self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
+
+    def check_password(self, password):
+        return bcrypt.check_password_hash(self.password_hash, password)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'email': self.email,
+            'created_at': self.created_at.isoformat(),
+            'is_active': self.is_active
+        }
+```
+
+#### Produto (`Product`)
+```python
+class Product(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.Text)
+    price = db.Column(db.Float, nullable=False)
+    image_url = db.Column(db.String(500))
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
+    stock_quantity = db.Column(db.Integer, default=0)
+    is_active = db.Column(db.Boolean, default=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    category = db.relationship('Category', backref='products')
+```
+
+#### Categoria (`Category`)
+```python
+class Category(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    slug = db.Column(db.String(100), unique=True, nullable=False)
+    description = db.Column(db.Text)
+    image_url = db.Column(db.String(500))
+    is_active = db.Column(db.Boolean, default=True)
+```
+
+#### Pedido (`Order`)
+```python
+class Order(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    total_amount = db.Column(db.Float, nullable=False)
+    status = db.Column(db.String(50), default='pending')
+    shipping_address = db.Column(db.Text)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    user = db.relationship('User', backref='orders')
+    items = db.relationship('OrderItem', backref='order')
+```
+
+### 🔧 Configuração do Banco de Dados
+
+#### 1. Instalar dependências
+```bash
+pip install flask-sqlalchemy flask-migrate bcrypt
+```
+
+#### 2. Configurar SQLAlchemy no Flask
+```python
+# app/__init__.py
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///zetadivision.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+```
+
+#### 3. Inicializar o banco
+```bash
+# Criar migrations
+flask db init
+flask db migrate -m "Initial migration"
+flask db upgrade
+```
+
+#### 4. Atualizar services.py
+```python
+from app import db
+from .models import User
+
+def create_user(name, email, password):
+    if User.query.filter_by(email=email).first():
+        return None
+
+    user = User(name=name, email=email)
+    user.set_password(password)
+
+    db.session.add(user)
+    db.session.commit()
+
+    return user
+
+def authenticate_user(email, password):
+    user = User.query.filter_by(email=email).first()
+    if user and user.check_password(password):
+        return user
+    return None
+
+def get_user_by_email(email):
+    return User.query.filter_by(email=email).first()
+```
+
+### 📁 Estrutura Final do Banco
 
 ```
 ZetaDivision/
-├── frontend/                    # Aplicação React
-│   ├── src/
-│   │   ├── components/          # Componentes React
-│   │   │   ├── pages/          # Páginas principais
-│   │   │   │   ├── PaginaInicial.jsx
-│   │   │   │   ├── PaginaProduto.jsx
-│   │   │   │   └── PaginaCatalogo.jsx
-│   │   │   ├── UI/             # Componentes UI reutilizáveis
-│   │   │   │   ├── Button.jsx
-│   │   │   │   ├── QuantitySelector.jsx
-│   │   │   │   └── EstrelaInsignia.jsx
-│   │   │   ├── Header.jsx
-│   │   │   ├── Footer.jsx
+├── backend/
+│   ├── app/
+│   │   ├── __init__.py          # Configuração Flask + SQLAlchemy
+│   │   ├── models/
+│   │   │   ├── __init__.py      # Importa todos os modelos
+│   │   │   ├── user.py          # Modelo User
+│   │   │   ├── product.py       # Modelo Product
+│   │   │   ├── category.py      # Modelo Category
+│   │   │   └── order.py         # Modelo Order
+│   │   └── blueprints/
+│   │       ├── auth/
+│   │       │   ├── routes.py    # Endpoints de auth
+│   │       │   └── services.py  # Lógica de negócio
+│   │       └── products/        # Endpoints de produtos
+│   └── migrations/              # Migrations do Flask-Migrate
+```
+
+### 🚀 Próximos Passos
+
+1. **Instalar dependências do banco**
+2. **Criar modelos SQLAlchemy**
+3. **Configurar Flask-Migrate**
+4. **Migrar dados mockados para o banco**
+5. **Atualizar serviços para usar banco real**
+6. **Testar integração completa**
+
+---
+
+## 📋 Como Rodar o Projeto
+
+### Backend (Flask)
+```bash
+cd backend
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+python main.py
+```
+
+### Frontend (React)
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Acesse: `http://localhost:3000`
+
+---
+
+## 🎯 Funcionalidades Implementadas
+
+- ✅ **Sistema de Autenticação** - Login/Cadastro com validações
+- ✅ **Design Responsivo** - Mobile-first approach
+- ✅ **Carrinho de Compras** - Funcional com localStorage
+- ✅ **Navegação por Categorias** - Interface intuitiva
+- ✅ **Experiência Premium** - Animações e transições suaves
+
+---
+
+## 📞 Suporte
+
+Para dúvidas sobre implementação do banco de dados, consulte a documentação do SQLAlchemy e Flask-Migrate.
 │   │   │   ├── ProductCard.jsx
 │   │   │   └── CartDrawer.jsx
 │   │   ├── contexts/           # React Context
