@@ -103,31 +103,100 @@ class Order(db.Model):
 
 #### 1. Instalar dependências
 ```bash
-pip install flask-sqlalchemy flask-migrate bcrypt
+pip install flask-sqlalchemy alembic bcrypt
 ```
 
-#### 2. Configurar SQLAlchemy no Flask
+#### 2. Configurar SQLAlchemy + Alembic no Flask
 ```python
 # app/__init__.py
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
+from alembic import command
+from alembic.config import Config
+from alembic import op
+import sqlalchemy as sa
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///zetadivision.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+
+# Configurar Alembic
+alembic_cfg = Config("alembic.ini")
+alembic_cfg.set_main_option("sqlalchemy.url", app.config['SQLALCHEMY_DATABASE_URI'])
 ```
 
-#### 3. Inicializar o banco
+#### 3. Inicializar Alembic
 ```bash
-# Criar migrations
-flask db init
-flask db migrate -m "Initial migration"
-flask db upgrade
+# Criar diretório de migrações
+alembic init alembic
+
+# Configurar alembic.ini (já criado pelo comando acima)
+# Em alembic.ini, definir:
+# sqlalchemy.url = sqlite:///zetadivision.db
+
+# Criar primeira migração
+alembic revision -m "Create user table"
+
+# Executar migração
+alembic upgrade head
 ```
+
+#### 4. Exemplo de migração Alembic
+```python
+# alembic/versions/xxxxx_create_user_table.py
+from alembic import op
+import sqlalchemy as sa
+
+def upgrade():
+    op.create_table('user',
+        sa.Column('id', sa.Integer(), nullable=False),
+        sa.Column('name', sa.String(length=100), nullable=False),
+        sa.Column('email', sa.String(length=120), nullable=False),
+        sa.Column('password_hash', sa.String(length=128), nullable=False),
+        sa.Column('created_at', sa.DateTime(), nullable=True),
+        sa.Column('is_active', sa.Boolean(), nullable=True),
+        sa.PrimaryKeyConstraint('id'),
+        sa.UniqueConstraint('email')
+    )
+
+def downgrade():
+    op.drop_table('user')
+```
+
+#### 5. Comandos Alembic essenciais
+```bash
+# Criar nova migração
+alembic revision -m "Add new table"
+
+# Ver status das migrações
+alembic current
+
+# Aplicar migrações pendentes
+alembic upgrade head
+
+# Reverter última migração
+alembic downgrade -1
+
+# Ver histórico de migrações
+alembic history
+
+# Ver migrações pendentes
+alembic check
+```
+
+### 🔄 Flask-Migrate vs Alembic
+
+| Aspecto | Flask-Migrate | Alembic |
+|---------|---------------|---------|
+| **Integração** | Específico do Flask | SQLAlchemy puro |
+| **Facilidade** | Mais simples | Mais controle |
+| **Flexibilidade** | Limitada | Total controle |
+| **Comandos** | `flask db <comando>` | `alembic <comando>` |
+| **Migrações** | Auto-geradas | Manual/Assistida |
+
+**Recomendação:** Use **Flask-Migrate** para projetos Flask simples, **Alembic** para controle avançado ou projetos SQLAlchemy puros.
 
 #### 4. Atualizar services.py
 ```python
