@@ -559,7 +559,7 @@ npm run build
 ## 🎯 Roadmap - Features Futuras
 
 ### � **Autenticação e Usuários**
-- [x ] Sistema de Login/Cadastro (Email + Senha)
+- [x] Sistema de Login/Cadastro (Email + Senha)
 - [ ] Login Social (Google, GitHub)
 - [ ] Recuperação de senha
 - [ ] Perfil do usuário com histórico
